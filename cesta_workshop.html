@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="dcterms.date" content="2018-05-14" />
+  <title>Useful tools for statistical data analysis</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="libs/reveal.js-3.3.0.1/css/theme/simple.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="cme195.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Useful tools for statistical data analysis</h1>
+  <h1 class="subtitle">CESTA Workshop</h1>
+    <h3 class="date">May 14, 2018</h3>
+</section>
+
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
+<p></br></p>
+<ul>
+<li><p>Introduction</p></li>
+<li><p>Hypothesis testing</p></li>
+<li><p>Exploratory Data Analysis</p></li>
+<li><p>Topic Modeling</p></li>
+<li><p>Questions</p></li>
+</ul>
+</section>
+<section><section id="introduction" class="titleslide slide level1"><h1>Introduction</h1></section><section id="self-introduction" class="slide level2">
+<h2>Self-introduction</h2>
+<section>
+<div style="float: right; width: 25%; height: 60%; margin-left: 5%">
+<p></br></p>
+<p><img src="figs/curve3D.png" /></p>
+<p></br></p>
+</div>
+<div style="float: left; width: 70%; height: 60%;">
+<ul>
+<li><p>I am a PhD student in <a href="https://icme.stanford.edu/">ICME</a></p></li>
+<li><p>My research focuses on developing statistical methods for high dimensional data which take account of <strong>non-uniform data density and variance</strong>.</p></li>
+<li><p>I teach a short (4 weeks) introductory R course: <a href="https://cme195.github.io/" class="uri">https://cme195.github.io/</a></p></li>
+<li><p>In our lab, we use <strong>microbiome data</strong> for inspiration, i.e. we look for problems that this data generates and try to solve them.</p></li>
+</ul>
+</div>
+</section>
+</section><section id="digital-humanities" class="slide level2">
+<h2>Digital Humanities?</h2>
+<center>
+<img src="figs/digital_humanities_word_cloud.jpg" />
+</center>
+<p><small2> Generated with Voyant and Wikipedia entry for Digital Humanities. </small2></p>
+<p><small2> <em>DH now encompasses a wide range of methods and practices: visualizations of large image sets, 3D modeling of historical artifacts, ‘born digital’ dissertations, hashtag activism and the analysis thereof, alternate reality games, mobile makerspaces, and more.</em> <a href="#/fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p></small2></p>
+</section><section id="statistics" class="slide level2">
+<h2>Statistics</h2>
+<div style="float: left; width: 30%; font-size: 0.8em;">
+<p><img src="figs/chickenstats.jpg" /></p>
+</div>
+<div style="float: right; width: 65%; margin-left:5%;">
+<ul>
+<li><p>Helps you explore patterns hidden in your data making it easier to draw insights.</p></li>
+<li><p>Provides formal frameworks for data analysis and for modeling.</p></li>
+<li><p>Gives you means to tests your hypotheses ane evaluate significance of your findings.</p></li>
+</ul>
+</div>
+</section><section id="buzz-words-exercise" class="slide level2">
+<h2>Buzz words exercise</h2>
+</section><section id="books-and-classes" class="slide level2">
+<h2>Books and classes</h2>
+<ul>
+<li>Books:
+<ul>
+<li><a href="http://www-bcf.usc.edu/~gareth/ISL/">Introduction to Statistical Learning</a> <small2> by James, Witten, Hastie &amp; Tibshirani </small2></li>
+<li><a href="https://web.stanford.edu/~hastie/ElemStatLearn/">Elements of Statistical Learning</a> <small2> by Hasties, Tibshirani &amp; Friedman </small2></li>
+<li><a href="http://r4ds.had.co.nz/">R for Data Science</a> <small2> by Grolemind and Wickham </small2></li>
+<li><a href="http://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking</a> <small2> by McElreath on Bayesian statistics </small2></li>
+</ul></li>
+<li>Classes:
+<ul>
+<li>STATS 116: Theory of Probability</li>
+<li>STATS 200: Introduction to Statistical Inference</li>
+<li>STATS 202: Data Mining and Analysis</li>
+<li>STATS 206: Applied Multivariate Analysis</li>
+<li>STATS 208: Introduction to the Bootstrap</li>
+<li>STATS 216: Introduction to Statistical Learning</li>
+</ul></li>
+</ul>
+</section><section id="getting-free-help-on-campus" class="slide level2">
+<h2>Getting Free Help on Campus</h2>
+<p></br></p>
+<ul>
+<li><p><a href="https://statistics.stanford.edu/resources/consulting">[Stats Consulting]</a> Advice on experimental design, model fitting, data analysis and interpretation of results etc.</p></li>
+<li><p><a href="https://icme.stanford.edu/resources/computational-consulting-c2">[C2 Consulting]</a> Computational questions on optimization, implementation, software libraries, computer clusters, code speed-up, parallelisation, etc.</p></li>
+</ul>
+<p></br></p>
+<p><small2><a href="https://statistics.stanford.edu/resources/consulting" class="uri">https://statistics.stanford.edu/resources/consulting</a></small2></p>
+<p><small2> <a href="https://icme.stanford.edu/resources/computational-consulting-c2" class="uri">https://icme.stanford.edu/resources/computational-consulting-c2</a> </small2></p>
+</section></section>
+<section><section id="hypothesis-testing" class="titleslide slide level1"><h1>Hypothesis testing</h1></section><section id="coincidences" class="slide level2">
+<h2>Coincidences</h2>
+<p>Consider an example of a seemingly extremely unlikely event:</p>
+<ul>
+<li class="fragment">A woman won the New Jersey Lottery twice in four months. The event was widely reported as an amazing coincidence that beat <strong>odds of one in 17 trillion</strong>.</li>
+</ul>
+<ul>
+<li class="fragment">However, the reported probability is a chance of the event happening to <strong>a specific person</strong>.</li>
+</ul>
+<ul>
+<li class="fragment">A probability one should ask about is the one of this event happening to ANYONE in the US.</li>
+</ul>
+<ul>
+<li class="fragment">… and this one is just <strong>one in 30</strong>.</li>
+</ul>
+</section><section id="law-of-truly-large-numbers" class="slide level2">
+<h2>Law of TRULY large numbers</h2>
+<blockquote>
+<p>Given a sample size large enough, any outrageous thing is likely to happen <a href="#/fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+</blockquote>
+<p><strong>Blade of grass paradox </strong> (Diaconis 1990)</p>
+<blockquote>
+<p>If you were to stand in a field and reach down to touch a blade of grass, thereare millions of grass blades that you might touch.<br />
+But you will, in fact, touch one of them. The a priori fact that<br />
+the blade you touch will be any particular one has an extremely tiny<br />
+probability, but such an occurrence must take place if you are going<br />
+to touch a blade of grass.</p>
+</blockquote>
+</section><section id="reproducible-research" class="slide level2">
+<h2>Reproducible research</h2>
+<ul>
+<li class="fragment">The truth is, there are tons ways to model the data. Then, there are usually dozens of parameters associated with each model.</li>
+</ul>
+<ul>
+<li class="fragment">Instead of worrying about whether you made a good choice all the time, just <strong>do the best you can, be honest and report everything!</strong></li>
+<li class="fragment">Never delete raw data.</li>
+<li class="fragment">Document all decisions.</li>
+<li class="fragment">Save your code and intermediate results.</li>
+<li class="fragment">Share your program AND documentation with the public.</li>
+</ul>
+</section><section id="hypothesis-testing-can-be-used-to-answer-questions" class="slide level2">
+<h2>Hypothesis testing can be used to answer questions</h2>
+<ul>
+<li class="fragment">Is the measured quantity equal to/higher/lower than a given threshold?</li>
+<li class="fragment">e.g. is the cooccurrence of a pair of words is higher than a certain level?</li>
+</ul>
+<ul>
+<li class="fragment">Is there a significant difference between two groups of observations?</li>
+<li class="fragment">e.g. is the frequency of certain words higher in one literary genre then another?</li>
+</ul>
+<ul>
+<li class="fragment">Are the values two two quantities related?</li>
+<li class="fragment">e.g. is there a correlation between tweet sentiment from certain people and a stocks market movement?</li>
+</ul>
+</section><section id="steps-required-for-hypothesis-testing" class="slide level2">
+<h2>Steps required for hypothesis testing</h2>
+<ol type="1">
+<li class="fragment">Define the null and the alternative hypothesis.</li>
+</ol>
+<ol start="2" type="1">
+<li class="fragment">Choose a level of significance <span class="math inline">\(\alpha\)</span>.</li>
+</ol>
+<ol start="3" type="1">
+<li class="fragment">Define and compute a test statistic.</li>
+</ol>
+<ol start="4" type="1">
+<li class="fragment">Compute a p-value.</li>
+</ol>
+<ol start="5" type="1">
+<li class="fragment">Decide whether to reject the null hypothesis by comparing p-value to <span class="math inline">\(\alpha\)</span>.</li>
+</ol>
+<ol start="6" type="1">
+<li class="fragment">Draw conclusion from the test.</li>
+</ol>
+</section><section id="null-and-alternative-hypotheses" class="slide level2">
+<h2>Null and alternative hypotheses</h2>
+<p></br></p>
+<p><strong>A null hypothesis (<span class="math inline">\(H_0\)</span>)</strong>: A statement assumed to be true unless it can be shown incorrect beyond a reasonable doubt. This is something one usually attempts to disprove or discredit.</p>
+<p></br></p>
+<p><strong>The alternate hypothesis (<span class="math inline">\(H_1\)</span>)</strong>: A claim that is contradictory to H0 and what we conclude when we reject H0.</p>
+</section><section id="section" class="slide level2">
+<h2></h2>
+<blockquote>
+<p>H0 and H1 are on purporse set up to be contradictory, so that one <strong>can collect and examine data to decide if there is enough evidence to reject the null hypothesis or not</strong>.</p>
+</blockquote>
+<center>
+<p><img src="figs/failed_reject.jpg" /></p>
+</center>
+</section><section id="students-t-test" class="slide level2">
+<h2>Student’s t-test</h2>
+<div style="float: left; width: 70%;">
+<ul>
+<li><p>William Gosset (1908), a chemist at <strong>the Guiness brewery</strong>.</p></li>
+<li><p>Published in Biometrika under a <strong>pseudonym Student</strong>.</p></li>
+<li><p>Used to select best yielding varieties of barley.</p></li>
+<li><p>Now, is a widely adopted method for hypothesis testing.</p></li>
+</ul>
+</div>
+<div style="float: right; width: 25%; margin-left: 5%;">
+<p><img src="figs/guiness.jpg" /></p>
+</div>
+</section><section id="one-sample-t-test" class="slide level2">
+<h2>One sample t-test</h2>
+<p><strong>Test the null hypothesis:</strong> the mean of data is equal to <span class="math inline">\(\mu_0\)</span></p>
+<p><span class="math display">\[
+H_0: \mu = \mu_0 \\
+H_a: \mu \ne \mu_0 
+\]</span></p>
+<p>Test statistic:</p>
+<p><span class="math display">\[
+t = \frac{\bar X - \mu_0}{s / \sqrt{n}}
+\]</span></p>
+<p>where <span class="math inline">\(\bar X\)</span> is tha sample average, <span class="math inline">\(s\)</span> is the sample standard deviation, and <span class="math inline">\(n\)</span> is the number of observations.</p>
+</section><section id="two-sample-welchs-t-test" class="slide level2">
+<h2>Two sample (Welch’s) t-test</h2>
+<p><strong>Test the null hypothesis:</strong> the mean is equal in both groups</p>
+<p><span class="math display">\[
+H_0: \mu_1 = \mu_2 \\
+H_a: \mu_1 \ne \mu_2
+\]</span></p>
+<p>Test statistic:</p>
+<p><span class="math display">\[
+t = \frac{\bar X_1 - \bar X_2}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}
+\]</span></p>
+<p>Welch’s t-test used when the two population variances are not assumed to be equal.</p>
+</section><section id="assumptions-of-t-test" class="slide level2">
+<h2>Assumptions of t-test</h2>
+<ul>
+<li>the sample mean – <span class="math inline">\(\bar X\)</span> – is normally distributed,</li>
+<li>the sample variance – <span class="math inline">\(s^2\)</span> – follows a scaled <span class="math inline">\(\chi^2\)</span> distribution</li>
+<li><span class="math inline">\(\bar X\)</span> and <span class="math inline">\(s^2\)</span> are independent</li>
+</ul>
+<p><strong>Note that:</strong></p>
+<p>Normality of individual observations <span class="math inline">\(X_1, X_2, \dots, X_n\)</span> is not required.</p>
+<p><strong>Central limit theorem:</strong></p>
+<p>sample means of moderately large samples are often well-approximated by a normal distribution even if the data are not normally distributed</p>
+</section><section id="p-value" class="slide level2">
+<h2>p-value</h2>
+<div style="float: left; width: 40%">
+<p>t-distribution with appropriate degrees of freedom</p>
+<p><img src="figs/tdist.gif" /></p>
+</div>
+<div style="float: right; width: 55%; margin-left: 5%">
+<ul>
+<li class="fragment">p-value is <strong>a probability of observing the recorded event or a <em>more extreme occurrence</em>, assuming that <span class="math inline">\(H_0\)</span> is true</strong>.</li>
+</ul>
+<ul>
+<li class="fragment">Small p-value indicates strong evidence against <span class="math inline">\(H_0\)</span>. You should reject <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<ul>
+<li class="fragment">Large p-value indicates weak evidence against <span class="math inline">\(H_0\)</span>. You CANNOT reject <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+</div>
+</section><section id="p-value-1" class="slide level2">
+<h2>p-value</h2>
+<p>p-value can be written as <span class="math inline">\(P[\text{data} \mid H_0]\)</span>.</p>
+<p>Note that:</p>
+<p><span class="math display">\[P[\text{data}  \; \mid \; \text{hypothesis} ] \ne P[\text{hypothesis}  \; \mid \; \text{data}]\]</span></p>
+<p></br></p>
+<p><strong>This is the reason why p-values should NOT be used for ranking or scoring different hypotheses</strong>.</p>
+<p>p-values can only be used to reject a null hypothesis.</p>
+<p>Also, null hypothesis cannot be proven true, <strong>you can only fail to reject it</strong>.</p>
+</section><section id="example-one-sample-test" class="slide level2">
+<h2>Example: one sample test</h2>
+<ul>
+<li>A built-in dataset, <code>mtcars</code>, that comes from a 1974 issue of Motor Trends magazine.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;mtcars&quot;</span>)
+<span class="kw">head</span>(mtcars)</code></pre></div>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<ul>
+<li>rows correspond to car models,</li>
+<li>column are car attributes: miles per gallon, number of cylinders, displacement, transmission etc.</li>
+</ul>
+</section><section id="testing-mpg-equal-to-a-value" class="slide level2">
+<h2>Testing ‘mpg’ equal to a value</h2>
+<div class="left">
+<p>Is the mean fuel efficiency (mpg) in the cars in <code>mtcars</code> statistically equal to 25?</p>
+<p></br> <strong>Two-sided test</strong></p>
+<p><span class="math display">\[H_0: \mu = 25 \\
+H_a: \mu \ne 25\]</span> where <span class="math inline">\(\mu\)</span> is the mean mpg of cars in the dataset</p>
+</div>
+<div class="right">
+<p><img src="figs/both-sided.png" /></p>
+</div>
+</section><section id="section-1" class="slide level2">
+<h2></h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars<span class="op">$</span>mpg</code></pre></div>
+<pre><code>##  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2
+## [15] 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4
+## [29] 15.8 19.7 15.0 21.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tt &lt;-<span class="st"> </span><span class="kw">t.test</span>(<span class="dt">x =</span> mtcars<span class="op">$</span>mpg, <span class="dt">mu =</span> <span class="dv">25</span>, <span class="dt">alternative =</span> <span class="st">&quot;two.sided&quot;</span>)
+tt</code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  mtcars$mpg
+## t = -4.6079, df = 31, p-value = 6.587e-05
+## alternative hypothesis: true mean is not equal to 25
+## 95 percent confidence interval:
+##  17.91768 22.26357
+## sample estimates:
+## mean of x 
+##  20.09062</code></pre>
+</section><section id="testing-mpg-smaller-than-a-value" class="slide level2">
+<h2>Testing ‘mpg’ smaller than a value</h2>
+<div class="left">
+<p>Is the mean fuel efficiency (mpg) in the cars in <code>mtcars</code> statistically less than 25?</p>
+<p></br> <strong>One-sided test</strong></p>
+<p><span class="math display">\[H_0: \mu = 25 \\
+H_a: \mu &lt; 25\]</span> where <span class="math inline">\(\mu\)</span> is the mean mpg of cars in the dataset</p>
+</div>
+<div class="right">
+<p><img src="figs/left-sided.png" /></p>
+</div>
+</section><section id="section-2" class="slide level2">
+<h2></h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tt &lt;-<span class="st"> </span><span class="kw">t.test</span>(<span class="dt">x =</span> mtcars<span class="op">$</span>mpg, <span class="dt">mu =</span> <span class="dv">25</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)
+tt</code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  mtcars$mpg
+## t = -4.6079, df = 31, p-value = 3.293e-05
+## alternative hypothesis: true mean is less than 25
+## 95 percent confidence interval:
+##      -Inf 21.89707
+## sample estimates:
+## mean of x 
+##  20.09062</code></pre>
+</section><section id="sign-test" class="slide level2">
+<h2>Sign test</h2>
+<p>If <span class="math inline">\(n\)</span> is small and <span class="math inline">\(\bar X\)</span> is not normal, one can use distribution-free, non-parametric sign-test.</p>
+<p><span class="math display">\[
+H_0: \text{median} = \mu_0 \\
+H_a: \text{median} &gt; \mu_0
+\]</span></p>
+<p><span class="math inline">\(V\)</span> = Number of times <span class="math inline">\(X_i - \mu_0 &gt; 0\)</span></p>
+<p><span class="math inline">\(V \sim \text{Binomial}(n, p = 1/2)\)</span></p>
+<p>The probability of observed <span class="math inline">\(V\)</span> under this distribution is now the p-value.</p>
+</section><section id="bootstrap-and-permtation-two-sample-test" class="slide level2">
+<h2>Bootstrap and permtation two-sample test</h2>
+<p>If sample means normality is satisfied, one can use permutation or bootstrap method to estimate the distribution of the test-statistic.</p>
+<p><strong>Permutation:</strong> rearranging of the group labels.</p>
+<!---Compute the test statistic, $t_i$, for data under a permutation $i$ of 
+the group assignments -->
+<p>The p-value is the proportion of sampled data permutations where the the test statistic <span class="math inline">\(t_i\)</span> was greater than or equal to the test statistics corresponding to the original (unpermuted) data <span class="math inline">\(t\)</span>.</p>
+<p><strong>Bootstrap:</strong> assign samples to each group by resampling with replacement Useful, when datasets are large.</p>
+<!----------------------------------------------------------------------------->
+</section></section>
+<section><section id="exploratory-data-analysis" class="titleslide slide level1"><h1>Exploratory Data Analysis</h1></section><section id="unsupervised-learning" class="slide level2">
+<h2>Unsupervised Learning</h2>
+<ul>
+<li>Inferring latent/hidden patterns and structures in unlabeled data (no class-assignents).</li>
+<li>Understanding the relationships between features or among observations.</li>
+<li>No special variables such as response or output variables, which need to be predicted.</li>
+<li>There are no prespecified classes or groups of observations. Ther is only X and no Y.</li>
+</ul>
+</section><section id="dimensionality-reduction-and-visualization" class="slide level2">
+<h2>Dimensionality Reduction and Visualization</h2>
+<ul>
+<li class="fragment">Most of <strong>real life datasets are now high-dimensional</strong> e.g. text corpora, user internet activity, genetic sequencing data etc.</li>
+<li class="fragment">DR or feature extraction methods <strong>can reduce the number of variables.</strong></li>
+<li class="fragment">The methods can be used to:</li>
+<li class="fragment">compress the data</li>
+<li class="fragment">remove redundant features and noise</li>
+<li class="fragment">increase accuracy of learning methods by avoiding over-fitting and <a href="http://statweb.stanford.edu/~donoho/Lectures/AMS2000/Curses.pdf">the curse of dimensionality</a></li>
+<li class="fragment">Common methods for dimensionality reduction include: PCA, CA, ICA, MDS, Isomaps, Laplacian Eigenmaps, tSNE.</li>
+</ul>
+</section><section id="voyant-scatterplot-pca-or-ca-on-word-frequencies" class="slide level2">
+<h2>Voyant ScatterPlot = PCA or CA on word frequencies</h2>
+<p><img src="cesta_workshop_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;" /></p>
+</section><section id="principal-component-analysis-pca" class="slide level2">
+<h2>Principal Component Analysis (PCA)</h2>
+<div style="float: left; width: 45%; height: 70%">
+<p><img src="figs/halfSphere.png" /></p>
+</div>
+<div style="float: left; width: 51%; height: 70%">
+<p><img src="figs/pca.png" /></p>
+</div>
+<p>Source: <a href="https://web.stanford.edu/~hastie/ElemStatLearn/">ESL Chapter 14</a></p>
+</section><section id="maximal-variance-projection" class="slide level2">
+<h2>Maximal Variance Projection</h2>
+<p></br></p>
+<ul>
+<li><p>For <span class="math inline">\(X\in \mathbb{R}^{n \times p}\)</span>, <span class="math inline">\(\tilde X = (X - \bar X)\)</span> is a centered data matrix.</p></li>
+<li><p>PCA is <strong>an eigenvalue decomposition of the sample covariance matrix</strong>:</p></li>
+</ul>
+<p><span class="math display">\[C = \frac{1}{n-1} \tilde X ^T \tilde X = \frac{1}{n-1} V \Sigma^2 V^T\]</span></p>
+<ul>
+<li>or (equivalently) <strong>a singular value decomposition (SVD)</strong> of <span class="math inline">\(\tilde X\)</span> itself:</li>
+</ul>
+<p><span class="math display">\[\tilde X = U \Sigma V^T \]</span></p>
+<p>In the above <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> are orthodgonal matrices and <span class="math inline">\(\Sigma\)</span> is a diagonal matrix.</p>
+</section><section id="section-3" class="slide level2">
+<h2></h2>
+<ul>
+<li>The projection of X into the space of principal components is called a <strong>component scores</strong>:</li>
+</ul>
+<p><span class="math display">\[S = \tilde{X} V = U\Sigma V^T V = U\Sigma\]</span></p>
+<p></br></p>
+<ul>
+<li>The weights of the variables in the PCA space, <span class="math inline">\(L = V\Sigma\)</span>, are called <strong>loadings</strong>.</li>
+</ul>
+</section><section id="dimensionality-reduction-with-pca" class="slide level2">
+<h2>Dimensionality reduction with PCA</h2>
+<ul>
+<li class="fragment">PCA finds <strong>a set of uncorrelated</strong> directions (components) that are <strong>linear combinations of the original data</strong>.</li>
+</ul>
+<ul>
+<li class="fragment">These components sequentially explain most of the variation remaining subsequently in the data.</li>
+</ul>
+<ul>
+<li class="fragment">Reduction occurs when the top <span class="math inline">\(k \ll \min(p, n)\)</span> components are retained.</li>
+</ul>
+<ul>
+<li class="fragment">The <span class="math inline">\(k\)</span>-dimensional approximation of <span class="math inline">\(X\)</span> is:</li>
+</ul>
+<ul>
+<li class="fragment"><span class="math display">\[S_k = U_k D_k\]</span></li>
+</ul>
+<ul>
+<li class="fragment">where <span class="math inline">\(U_k\)</span> is a matrix with <span class="math inline">\(k\)</span> first columns of <span class="math inline">\(U\)</span> and <span class="math inline">\(D_k\)</span> is the diagonal matrix containing first <span class="math inline">\(q\)</span> diagonal terms of <span class="math inline">\(D\)</span></li>
+</ul>
+</section><section id="what-does-it-all-mean" class="slide level2">
+<h2>What does it all mean?</h2>
+<ul>
+<li><p>You can use <strong>eiganvalues and eigenvectors</strong> generated by PCA to learn the structure of your data.</p></li>
+<li><p>Most commonly, people use <strong>scree plots, as well as feature plots, sample plots and biplots</strong> to visualize PCA results.</p></li>
+<li><p>Feature and sample plots are self-explanatory, we will explain what scree plots and biplots are.</p></li>
+</ul>
+</section><section id="scree-plot" class="slide level2">
+<h2>Scree plot</h2>
+<div style="float: left; width: 70%">
+<ul>
+<li>Eigenvalues are used to compute the amount of <em>variance explained</em>.</li>
+<li><p>A scree plot can be used to choose how many components to retain for further analysis.</p></li>
+<li><p>Choose the smallest number of PCs that explain a sizable amount of variation in the data.</p></li>
+<li><p>Look for <strong>“elbows”</strong> in the scree plots i.e. points at which <strong>the proportion of variance explained</strong> by subsequent PCs drops off.</p></li>
+</ul>
+</div>
+<div style="float: right; width: 30%">
+<p><img src="figs/scree.gif" /></p>
+</div>
+</section><section id="biplot" class="slide level2">
+<h2>Biplot</h2>
+<p>Both samples and variables displayed in the same plot.</p>
+<p><img src="cesta_workshop_files/figure-revealjs/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section><section id="the-us-crime-rates-dataset" class="slide level2">
+<h2>The US crime rates dataset</h2>
+<p>The built in dataset includes information on violent crime rates in the US in 1975.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(USArrests)</code></pre></div>
+<pre><code>##            Murder Assault UrbanPop Rape
+## Alabama      13.2     236       58 21.2
+## Alaska       10.0     263       48 44.5
+## Arizona       8.1     294       80 31.0
+## Arkansas      8.8     190       50 19.5
+## California    9.0     276       91 40.6
+## Colorado      7.9     204       78 38.7</code></pre>
+</section><section id="pca-in-r" class="slide level2">
+<h2>PCA in R</h2>
+<ul>
+<li>In R, the function <code>prcomp()</code> can be used to perform PCA.</li>
+<li><code>prcomp()</code> is faster and preferred method over <code>princomp()</code>; it is a PCA implementation based on SVD.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pca.res &lt;-<span class="st"> </span><span class="kw">prcomp</span>(USArrests, <span class="dt">scale =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<ul>
+<li>The output of <code>prcomp()</code> is a list containing:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(pca.res)</code></pre></div>
+<pre><code>## [1] &quot;sdev&quot;     &quot;rotation&quot; &quot;center&quot;   &quot;scale&quot;    &quot;x&quot;</code></pre>
+</section><section id="section-4" class="slide level2">
+<h2></h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">biplot</span>(pca.res, <span class="dt">scale=</span><span class="dv">1</span>, <span class="dt">cex =</span> <span class="fl">0.8</span>)</code></pre></div>
+<p><img src="cesta_workshop_files/figure-revealjs/unnamed-chunk-10-1.png" width="576" style="display: block; margin: auto;" /></p>
+</section><section id="correspondence-analysis-ca" class="slide level2">
+<h2>Correspondence Analysis (CA)</h2>
+<ul>
+<li class="fragment">Applies to data with measurements <strong>in same scale and units</strong>.</li>
+</ul>
+<ul>
+<li class="fragment">Unlike PCA, CA is often used for categorical rather than continuous data.</li>
+</ul>
+<ul>
+<li class="fragment">Specifically,CA is performed on a <strong>contingency tables</strong> – data tables with frequency distribution.</li>
+</ul>
+<ul>
+<li class="fragment">Computations are the similar but slightly different than in PCA, and involve an initial <em>data normalizion step</em>.</li>
+</ul>
+</section><section id="correspondence-analysis-computations" class="slide level2">
+<h2>Correspondence Analysis Computations</h2>
+<p>Input:</p>
+<p>contingency table <span class="math inline">\(C \in \mathbb{R}^{n \times p}\)</span> e.g. word frequencies in documents</p>
+<p>Data transformation:</p>
+<p><span class="math display">\[
+M  = \frac{1}{s}C - w_{row}w_{col}^T
+\]</span></p>
+<p>where <span class="math inline">\(s = \text{sum all entries in C}\)</span>,</p>
+<p>and</p>
+<p><span class="math display">\[{\vec w}_{row} = \frac{1}{s} C\mathbf{1}, \\
+{\vec w}_{col}^T = \frac{1}{s} \mathbf{1}^TC\]</span></p>
+</section><section id="generalized-svd-on-m" class="slide level2">
+<h2>Generalized SVD on <span class="math inline">\(M\)</span></h2>
+<p><span class="math display">\[M = U \Sigma V^T\]</span></p>
+<p>with constraints:</p>
+<p><span class="math display">\[U^T W_{row} U = I \; \text{ and } \; V^T W_{col} V= I\]</span></p>
+<p>where <span class="math inline">\(W_{row}\)</span> and <span class="math inline">\(W_{col}\)</span> are diagonal matrices whose entries are <span class="math inline">\({\vec w}_{row}\)</span>, <span class="math inline">\({\vec w}_{col}\)</span>, defined in the previous slide.</p>
+<p>The coordinates for rows and columns in the CA projection are then:</p>
+<p><span class="math display">\[
+F_n = W_n U \Sigma \\
+F_p = W_p V \Sigma
+\]</span></p>
+</section></section>
+<section><section id="break-for-an-exercise" class="titleslide slide level1"><h1>Break for an exercise</h1></section></section>
+<section><section id="clustering" class="titleslide slide level1"><h1>Clustering</h1></section><section id="cluster-analysis" class="slide level2">
+<h2>Cluster Analysis</h2>
+<ul>
+<li><strong>Clustering is an exploratory technique</strong> which can <strong>discover hidden groups</strong> that are important for understanding the data.</li>
+<li>Groupings are determined from the data itself, <strong>without any prior knowledge about labels or classes</strong>.</li>
+<li>There are the clustering methods available; a lot of them have an R implementaion available on <a href="https://cran.r-project.org/web/views/Cluster.html">CRAN</a>.</li>
+</ul>
+<div style="text-align: center">
+<p><img src="figs/clusters.png" /></p>
+</div>
+</section><section id="section-5" class="slide level2">
+<h2></h2>
+<ul>
+<li>To cluster the data we need a <strong>measure of similarity</strong> or <strong>dissimilarity</strong> between a pair of observations, e.g. an Euclidean distance.</li>
+</ul>
+<div style="text-align: center; height: 75%">
+<p><img src="figs/birdsOfFeather.png" /></p>
+</div>
+</section><section id="k-means" class="slide level2">
+<h2>k-means</h2>
+<ul>
+<li>k-means is a simple and fast <strong>iterative relocation method</strong> for clustering data into <span class="math inline">\(k\)</span> distinct non-overlapping groups.</li>
+<li>The algorithm minimizes the variation within each cluster.</li>
+</ul>
+<div style="height: 30%; width: 50%; align: center">
+<p><img src="figs/right.gif" /></p>
+<p>Source: <a href="http://shabal.in/visuals/kmeans/3.html">link</a></p>
+</div>
+</section><section id="k-means-drawbacks" class="slide level2">
+<h2>k-means drawbacks</h2>
+<ul>
+<li><strong>The number clusters <span class="math inline">\(k\)</span> must be prespecified</strong> (before clustering).</li>
+<li>The method is stochastic, and involves <strong>random initialization of cluster centers</strong>.</li>
+<li>This means that each time the algorithm is run, the results obtained can be different.</li>
+</ul>
+<p>The number of clusters, <span class="math inline">\(k\)</span>, should be chosen using statistics such as:</p>
+<ul>
+<li>Gap Statistic <a href="http://www.web.stanford.edu/~hastie/Papers/gap.pdf">link</a></li>
+<li>Silhouette statistic <a href="https://en.wikipedia.org/wiki/Silhouette_(clustering)">link</a></li>
+<li>Calinski-Harbasz index <a href="http://www.biomedcentral.com/content/supplementary/1477-5956-9-30-S4.PDF">link</a></li>
+</ul>
+</section><section id="image-segmentation" class="slide level2">
+<h2>Image segmentation</h2>
+<ul>
+<li><p>One of the application of k-means clustering is <a href="https://www.r-bloggers.com/r-k-means-clustering-on-an-image/"><strong>image segmentation</strong></a>.</p></li>
+<li><p>Here we use a picture of a field of tulips in the Netherlands downloaded from <a href="%22http://www.infohostels.com/immagini/news/2179.jpg%22">here</a>.</p></li>
+</ul>
+<div style="text-align: center; height: 75%">
+<p><img src="figs/Image.jpg" /></p>
+</div>
+</section><section id="importing-image-to-r" class="slide level2">
+<h2>Importing image to R</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(jpeg)
+img &lt;-<span class="st"> </span><span class="kw">readJPEG</span>(<span class="st">&quot;./figs/Image.jpg&quot;</span>) 
+(imgDm &lt;-<span class="st"> </span><span class="kw">dim</span>(img))</code></pre></div>
+<pre><code>## [1] 480 960   3</code></pre>
+<ul>
+<li>The image is a 3D array, so we will convert it to a data frame.</li>
+<li>Each row of the data frame should correspond a single pixel.</li>
+<li>The columns should include the pixel location (<code>x</code> and <code>y</code>), and the pixel intensity in red, green, and blue ( <code>R</code>, <code>G</code>, <code>B</code>).</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Assign RGB channels to data frame</span>
+imgRGB &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+  <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span>imgDm[<span class="dv">2</span>], <span class="dt">each =</span> imgDm[<span class="dv">1</span>]),
+  <span class="dt">y =</span> <span class="kw">rep</span>(imgDm[<span class="dv">1</span>]<span class="op">:</span><span class="dv">1</span>, imgDm[<span class="dv">2</span>]),
+  <span class="dt">R =</span> <span class="kw">as.vector</span>(img[,,<span class="dv">1</span>]),
+  <span class="dt">G =</span> <span class="kw">as.vector</span>(img[,,<span class="dv">2</span>]),
+  <span class="dt">B =</span> <span class="kw">as.vector</span>(img[,,<span class="dv">3</span>])
+)</code></pre></div>
+</section><section id="k-means-in-r" class="slide level2">
+<h2>k-means in R</h2>
+<ul>
+<li>Each pixel is a datapoint in 3D specifying the intensity in each of the three “R”, “G”, “B” channels, which determines the pixel’s color.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(imgRGB, <span class="dv">3</span>)</code></pre></div>
+<pre><code>##   x   y R         G         B
+## 1 1 480 0 0.3686275 0.6980392
+## 2 1 479 0 0.3686275 0.6980392
+## 3 1 478 0 0.3725490 0.7019608</code></pre>
+<ul>
+<li>We use k-means to cluster the pixels <span class="math inline">\(k\)</span> into color groups (clusters).</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">43658</span>) <span class="co"># Set seed as k-means involves a random initialization</span>
+k &lt;-<span class="st"> </span><span class="dv">2</span>
+kmeans.2clust &lt;-<span class="st"> </span><span class="kw">kmeans</span>(imgRGB[, <span class="kw">c</span>(<span class="st">&quot;R&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;B&quot;</span>)], <span class="dt">centers =</span> k)
+<span class="kw">names</span>(kmeans.2clust)</code></pre></div>
+<pre><code>## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;    
+## [5] &quot;tot.withinss&quot; &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;        
+## [9] &quot;ifault&quot;</code></pre>
+</section><section id="section-6" class="slide level2">
+<h2></h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># k cluster centers</span>
+kmeans.2clust<span class="op">$</span>centers</code></pre></div>
+<pre><code>##           R         G         B
+## 1 0.5682233 0.3251528 0.1452832
+## 2 0.6597320 0.6828609 0.7591578</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The centers correspond to the following colors:</span>
+<span class="kw">rgb</span>(kmeans.2clust<span class="op">$</span>centers)</code></pre></div>
+<pre><code>## [1] &quot;#915325&quot; &quot;#A8AEC2&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Cluster assignment of the first 10 pixels</span>
+<span class="kw">head</span>(kmeans.2clust<span class="op">$</span>cluster, <span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] 2 2 2 2 2 2 2 2 2 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert cluster assignment lables to cluster colors</span>
+kmeans.2colors &lt;-<span class="st"> </span><span class="kw">rgb</span>(kmeans.2clust<span class="op">$</span>centers[kmeans.2clust<span class="op">$</span>cluster, ])
+<span class="kw">head</span>(kmeans.2colors, <span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] &quot;#A8AEC2&quot; &quot;#A8AEC2&quot; &quot;#A8AEC2&quot; &quot;#A8AEC2&quot; &quot;#A8AEC2&quot; &quot;#A8AEC2&quot; &quot;#A8AEC2&quot;
+##  [8] &quot;#A8AEC2&quot; &quot;#A8AEC2&quot; &quot;#A8AEC2&quot;</code></pre>
+</section><section id="section-7" class="slide level2">
+<h2></h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> imgRGB, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> kmeans.2colors) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="kw">paste</span>(<span class="st">&quot;k-Means Clustering with&quot;</span>, k, <span class="st">&quot;clusters (colors)&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;x&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;y&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="cesta_workshop_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" style="display: block; margin: auto;" /></p>
+</section><section id="section-8" class="slide level2">
+<h2></h2>
+<p>Now, increasing the number of clusters to 6:</p>
+<p><img src="cesta_workshop_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" style="display: block; margin: auto;" /></p>
+</section><section id="hierarchical-clustering" class="slide level2">
+<h2>Hierarchical clustering</h2>
+<div style="height:10%; width:100%; float: center">
+<p><img src="figs/calderMobile.jpg" /></p>
+</div>
+<p><small> Alexander Calder’s mobile </small></p>
+<ul>
+<li>If it’s difficult (or if you simply don’t want) to choose the number of clusters ahead, you can do <strong>hierarchical clustering</strong>.<br />
+</li>
+</ul>
+</section><section id="section-9" class="slide level2">
+<h2></h2>
+<ul>
+<li class="fragment">Hierarchical clustering can be performed using <strong>agglomerative</strong> (bottom-up) or <strong>divisive</strong> (top-down) approach.</li>
+</ul>
+<ul>
+<li class="fragment">The method requires a choice of <strong>a pairwise distance metric and a rule of how to merge or divide clusters</strong>.</li>
+</ul>
+<ul>
+<li class="fragment">The output of the method can be represented as a graphical tree-based representation of the data, called a <strong>dendogram</strong>.</li>
+</ul>
+<ul>
+<li class="fragment">By inspecting the tree, you can decide where to set the cutoff for observation grouping.</li>
+</ul>
+<ul>
+<li class="fragment">There are also static and dynamic tree cutting algorithms.</li>
+</ul>
+</section><section id="section-10" class="slide level2">
+<h2></h2>
+<div style="float: left; width: 50%; height: 100%">
+<p><img src="figs/dogDendro.png" /></p>
+</div>
+<div style="float: left; width: 50%; height: 100%">
+<p><img src="figs/hierarchicalCutoff.png" /></p>
+</div>
+</section><section id="hierarchical-clustering-algorithm" class="slide level2">
+<h2>Hierarchical clustering algorithm</h2>
+<p><img src="figs/hierarchicalClusteringAlgorithm.png" /></p>
+<p>Source: ISL</p>
+</section><section id="section-11" class="slide level2">
+<h2></h2>
+<p>Results for hierarchical clustering differ depending on the choice of:</p>
+<ul>
+<li><p>A distance metric used for pairs of observations, e.g. Euclidean (L2), Manhattan (L1), Jaccard (Binary), <a href="http://dataaspirant.com/2015/04/11/five-most-popular-similarity-measures-implementation-in-python/">etc</a></p></li>
+<li><p>The rule used for grouping clusters that are already generated, e.g. minimum, maximum, average, or centroid cluster linkages.</p></li>
+</ul>
+<p></br></p>
+<div style="text-align: center; height: 75%">
+<p><img src="figs/clustering_distances.png" /></p>
+</div>
+</section><section id="section-12" class="slide level2">
+<h2></h2>
+<p>Different ways to compute dissimilarity between 2 clusters:</p>
+<p><img src="figs/linkages.png" /></p>
+</section></section>
+<section><section id="topic-modeling" class="titleslide slide level1"><h1>Topic modeling</h1></section><section id="latent-dirichlet-allocation-lda" class="slide level2">
+<h2>Latent Dirichlet Allocation (LDA)</h2>
+<p>LDA is a generative model, which assumes that:</p>
+<ul>
+<li><p>Each observation is a mixtures of topics.</p></li>
+<li><p>Each topic is a mixture of tokens.</p></li>
+</ul>
+<p>In textual analysis, topics might be themes e.g. “entertainment”, “politics”, or “sports”.</p>
+<p>Observations can be documents or parts of documents.</p>
+<p>Tokens are words.</p>
+</section><section id="lda" class="slide level2">
+<h2>LDA</h2>
+<p><img src="figs/LDA.png" /></p>
+<p>Source: <a href="https://medium.com/kifi-engineering/reactive-lda-library-d495ed2a6342">medium</a></p>
+</section><section id="lda-model" class="slide level2">
+<h2>LDA model</h2>
+<p>Let <span class="math inline">\(D\)</span> be the number of documents, <span class="math inline">\(V\)</span> the size of the vocabulary, and <span class="math inline">\(K\)</span> the number of underlying topics.</p>
+<p><span class="math display">\[
+\boldsymbol\gamma_{d = 1, \dots, D} \sim \text{Dirichlet}(\boldsymbol\alpha) \\
+\boldsymbol\beta_{k = 1, \dots, K} \sim \text{Dirichlet}(\boldsymbol\pi)\\
+\]</span></p>
+<p><span class="math inline">\(\text{ for all } d = 1, \dots, D \text{ and } \; j \in N_d\)</span> <span class="math display">\[
+z_{dj} \sim \text{Multinomial}_K(\boldsymbol\gamma_d)\\
+w_{dj} \sim \text{Multinomial}_V(\boldsymbol\beta_{z_{dj}})
+\]</span></p>
+<p>where <strong>hyperparameters</strong> satisfy <span class="math inline">\(\alpha_k, \; \pi_v &gt; 0\)</span>, <span class="math inline">\(\sum_{k = 1}^K\alpha_k = 1\)</span>, and <span class="math inline">\(\sum_{v = 1 }^{V}\pi_{v} = 1\)</span>.</p>
+<p>Usually, <span class="math inline">\(\boldsymbol\alpha\)</span>, and <span class="math inline">\(\boldsymbol\pi\)</span> are chosen to have equal entries, i.e. the topic and words distribution are assumed to have even priors.</p>
+</section><section id="bayesian-inference-for-lda-parameters" class="slide level2">
+<h2>Bayesian Inference for LDA parameters</h2>
+<ul>
+<li><p>Since, LDA is a full genrative model, we can write a joint probability for the entire model.</p></li>
+<li><p>Hyper parameters <span class="math inline">\(\boldsymbol \alpha, \boldsymbol \pi\)</span> can be integrated out.</p></li>
+<li><p>The main goal is to estimate the <strong>posterior distributions</strong> of <span class="math inline">\(\boldsymbol \gamma_d\)</span> for each document and <span class="math inline">\(\boldsymbol\beta_k\)</span> for each topic.</p></li>
+<li><p>Estimation is usually done via Gibbs sampling or variational Bayes approximation.</p></li>
+</ul>
+</section><section id="section-13" class="slide level2">
+<h2></h2>
+<p><img src="cesta_workshop_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" style="display: block; margin: auto;" /></p>
+</section></section>
+<section><section id="random-forest" class="titleslide slide level1"><h1>Random Forest</h1></section><section id="random-forest-1" class="slide level2">
+<h2>Random Forest</h2>
+<ul>
+<li>Random Forest is <strong>an ensemble learning method based on classification and regression trees, CART,</strong> proposed by <a href="http://link.springer.com/article/10.1023/A:1010933404324">Breinman</a> in 2001.</li>
+<li>RF can be used to perform <strong>both classification and regression</strong>.</li>
+<li>RF models are robust as they <strong>combine predictions calculated from a large number of decision trees (a forest).</strong></li>
+<li>Details on RF can be found in Chapter 8 of <a href="http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf">ISL</a> and Chapter 15 <a href="http://statweb.stanford.edu/~tibs/ElemStatLearn/">ESL</a>; also a good write-up can also be found <a href="http://www.bios.unc.edu/~dzeng/BIOS740/randomforest.pdf">here</a></li>
+</ul>
+</section><section id="decision-trees" class="slide level2">
+<h2>Decision trees</h2>
+<ul>
+<li><p>Cool visualization explaining what decision trees are: <a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/">link</a></p></li>
+<li><p>Decision tree on classification of Titanic Survivors:</p></li>
+</ul>
+<p><img src="cesta_workshop_files/figure-revealjs/unnamed-chunk-20-1.png" width="768" style="display: block; margin: auto;" /></p>
+</section><section id="tree-bagging-algorithm" class="slide level2">
+<h2>Tree bagging Algorithm</h2>
+<p>Suppse we have an input data matrix, <span class="math inline">\(X \in \mathbb{R}^{N \times p}\)</span> and a response vector, <span class="math inline">\(Y \in \mathbb{R}^N\)</span>.</p>
+<div style="color:#00008f">
+<p>For b = 1, 2, …, B:</p>
+<p><span class="math inline">\(\quad\)</span> 1. Generate a random subset of the data <span class="math inline">\((X_b, Y_b)\)</span> contatining <span class="math inline">\(n &lt; N\)</span> </p>
+<p><span class="math inline">\(\quad \;\)</span> observations sampled with replacement.</p>
+<p><span class="math inline">\(\quad\)</span> 2. Train a decision tree <span class="math inline">\(T_b\)</span> on <span class="math inline">\((X_b, Y_b)\)</span></p>
+<p><span class="math inline">\(\quad\)</span> 3. Predict the outcome for <span class="math inline">\(N-n\;\)</span> unseen (complement) samples <span class="math inline">\((X_b&#39;, Y_b&#39;)\)</span></p>
+<p>Afterwards, combine predictions from all decision trees and compute the average predicted outcome .</p>
+</div>
+<p></br></p>
+<p><strong>Averaging over a collection of decision trees makes the predictions more stable.</strong></p>
+</section><section id="decision-trees-for-bootrap-samples" class="slide level2">
+<h2>Decision trees for bootrap samples</h2>
+<div style="text-align: center">
+<p><img src="figs/ensembleTrees.png" alt="ESL" /></p>
+<p>Source: <a href="https://web.stanford.edu/~hastie/ElemStatLearn/">Chapter 8 ESL</a></p>
+</div>
+</section><section id="random-forest-characteristics" class="slide level2">
+<h2>Random Forest Characteristics</h2>
+<ul>
+<li><p>Random forests differ in only one way from tree bagging: it uses a modified tree learning algorithm sometimes called <strong>feature bagging</strong>.</p></li>
+<li><p>At each candidate split in the learning process, <strong>only a random subset of the features is included in a pool</strong> from which the variables can be selected for splitting the branch.</p></li>
+<li><p>Introducing <strong>randomness</strong> into the candidate splitting variables, <strong>reduces correlation between the generated trees.</strong></p></li>
+</ul>
+</section><section id="section-14" class="slide level2">
+<h2></h2>
+<div style="text-align: center">
+<p><img src="figs/rfparams.png" /></p>
+</div>
+</section><section id="section-15" class="slide level2">
+<h2></h2>
+<div style="text-align: center">
+<p><img src="figs/randomForest.jpg" /></p>
+<p>Source: <a href="http://www.slideshare.net/satnam74/india-software-developers-conference-2013-bangalore">link</a></p>
+</div>
+</section><section id="model-accuracy" class="slide level2">
+<h2>Model Accuracy</h2>
+<ul>
+<li><p>When dealing with a supervised learning task, always <strong>evaluate your model’s performance on a test set</strong></p></li>
+<li><p><strong>Test set</strong> is a collection of observations, which is set aside and not seen by the prediction method at all.</p></li>
+<li><p>In case of RF, performance on train and test set should be similar, beacause RF minimizes training errors on observations unseen by the tree.</p></li>
+<li><p>Confusion matrix can be used to asses the model accuracy.</p></li>
+<li><p>RF also gives ‘importance measures’ for each predictor (feature).</p></li>
+</ul>
+<!------------------------------------------------
+
+# Prediction
+
+## Supervised Learing
+
+## Linear Regression (continuous)
+
+## Logistic Regression (discrete)
+
+## Decision Trees
+
+
+## Network Analysis
+
+----------------------------->
+</section></section>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="http://www.jstor.org/stable/10.5749/j.ctt1cn6thb">Gold, Matthew K., and Lauren F. Klein, eds. Debates in the Digital Humanities 2016. Minneapolis; London: University of Minnesota Press, 2016.</a><a href="#/fnref1">↩</a></p></li>
+<li id="fn2"><p>Persi Diaconis &amp; Frederick Mosteller (2012) Methods for Studying Coincidences, Journal of the American Statistical Association, 84:408, 853-861, DOI: 10.1080/01621459.1989.10478847<a href="#/fnref2">↩</a></p></li>
+</ol>
+</section>
+    </div>
+  </div>
+
+  <script src="libs/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="libs/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

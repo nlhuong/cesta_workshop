@@ -1,0 +1,378 @@
+---
+title: "Exercises for Textual Analysis"
+output: 
+  html_notebook:
+    toc: true
+    toc_float: true
+    df_print: paged
+---
+
+Consider using `tidytext` package for preprocession and text analysis 
+
+https://www.tidytextmining.com/topicmodeling.html
+
+# Gutenberg Project
+
+There is a very useful package `gutenbergr` which allows you to import 
+literary works from the Gutenberg project straight into R.
+
+```{r}
+library(gutenbergr)
+library(tidytext)
+library(stringr)
+library(scales)
+library(tidyverse)
+```
+
+`gutenberg_metadata` gives information on each piece of work included in the
+database.
+
+```{r}
+head(gutenberg_metadata)
+```
+
+Let's see which are the most prolific writers from the ones available:
+
+```{r}
+print(gutenberg_metadata %>%
+        group_by(author) %>%
+        summarise(count = n()) %>%
+        arrange(desc(count)), n=30)
+```
+
+We pick 10 of the authors and 5 titles each.
+
+```{r}
+shakespeare <- gutenberg_metadata %>%
+  filter(author == "Shakespeare, William") %>%
+  slice(3:7)
+shakespeare
+
+twain <- gutenberg_metadata %>%
+  filter(author == "Twain, Mark") %>%
+  slice(1:5)
+twain
+
+dickens <- gutenberg_metadata %>%
+  filter(author == "Dickens, Charles")%>%
+  slice(1:5)
+dickens
+
+balzac <- gutenberg_metadata %>%
+  filter(author == "Balzac, Honoré de")%>%
+  slice(1:5)
+balzac
+
+tolstoy <- gutenberg_metadata %>%
+  filter(author == "Tolstoy, Leo, graf")%>%
+  slice(1:5)
+tolstoy
+
+verne <- gutenberg_metadata %>%
+  filter(author == "Verne, Jules")%>%
+  slice(1:5)
+verne
+
+stevenson <- gutenberg_metadata %>%
+  filter(author == "Stevenson, Robert Louis")%>%
+  slice(1:5)
+stevenson
+
+doyle <- gutenberg_metadata %>%
+  filter(author == "Doyle, Arthur Conan")%>%
+  slice(1:5)
+doyle
+
+dumas <- gutenberg_metadata %>%
+  filter(author == "Dumas, Alexandre")%>%
+  slice(1:5)
+dumas
+
+london <- gutenberg_metadata %>%
+  filter(author == "London, Jack")%>%
+  slice(1:5)
+london
+
+```
+
+
+`gutenberg_download()` is a function that will download the full text 
+of a chosen book in form of a data.frame where each row is a single line.
+To break down lines into words we can use `unnest_tokens()`.
+`anti_join(stop_words)` removes English stop words, i.e.
+words that are not useful for an analysis, typically extremely 
+common words such as “the”, “of”, “to” etc.
+
+```{r}
+
+author_names <- c("Shakespeare, William", "Twain, Mark", "Dickens, Charles",
+                  "Balzac, Honoré de", "Tolstoy, Leo, graf", "Verne, Jules",
+                  "Stevenson, Robert Louis", "Doyle, Arthur Conan",
+                  "Dumas, Alexandre", "London, Jack")
+
+                  
+author_texts <- list(shakespeare, twain, dickens, balzac, tolstoy,
+                     verne, stevenson, doyle, dumas, london)
+
+texts <- list()
+for(i in seq_along(author_names)) {
+  texts[[author_names[i]]] <- 
+    gutenberg_download(author_texts[[i]]$gutenberg_id) %>%
+      unnest_tokens(word, text) %>%
+      anti_join(stop_words) %>%
+      mutate(author = author_names[i]) 
+}
+
+```
+
+```{r}
+frequency <- bind_rows(texts) %>%
+  mutate(
+    word = str_extract(word, "[a-z']+"),
+    word = gsub('[[:digit:]]+', '', word)) %>%
+  filter(!is.na(word), word != "") %>%
+  count(author, word) %>%
+  filter(nchar(word) > 3) %>%
+  spread(author, n) 
+frequency[is.na(frequency)] <- 0
+frequency <- frequency[order(-rowSums(frequency[, -1])), ]
+
+```
+
+
+# Correspondence Analysis
+
+
+```{r}
+library(FactoMineR)
+library(factoextra)
+
+X <- data.frame(frequency[1:1000, ])
+rownames(X) <- X$word
+X <- X[, -1]
+res.ca <- CA(X, graph = FALSE)
+print(res.ca)
+
+```
+
+```{r}
+eigenvalues <- get_eigenvalue(res.ca)
+head(round(eigenvalues, 2))
+```
+
+```{r}
+fviz_screeplot(res.ca)
+```
+
+```{r, fig.width=12, fig.height=6}
+fviz_ca_biplot(res.ca, geom="text")
+```
+
+```{r}
+fviz_contrib(res.ca, choice = "row", axes = 1:2, top = 50)
+```
+
+```{r}
+fviz_contrib(res.ca, choice = "col", axes = 1:2, top = 50)
+```
+
+
+```{r}
+proportion <-  bind_rows(texts) %>%
+  mutate(
+    word = str_extract(word, "[a-z']+"),
+    word = gsub('[[:digit:]]+', '', word)) %>%
+  filter(!is.na(word), word != "") %>%
+  filter(nchar(word) > 3) %>%
+  count(author, word) %>%
+  group_by(author) %>%
+  mutate(proportion = n / sum(n)) %>% 
+  select(-n) %>% 
+  spread(author, proportion) %>% 
+  gather(author, proportion, -word, -`Dumas, Alexandre`)
+```
+
+
+$t = r \sqrt{\frac{n - 2}{1 - r^2}}$
+
+with Student-t distribution df = n − 2
+
+```{r}
+cor.test(data = proportion[proportion$author =="Balzac, Honoré de",],
+         ~ proportion + `Dumas, Alexandre`)
+```
+
+
+```{r}
+cor.test(data = proportion[proportion$author =="Shakespeare, William",],
+         ~ proportion + `Dumas, Alexandre`)
+```
+
+```{r, fig.width=10, fig.height=10}
+ggplot(proportion, aes(x = proportion, y = `Dumas, Alexandre`, 
+                       color = abs(`Dumas, Alexandre` - proportion))) +
+  geom_abline(color = "gray40", lty = 2) +
+  geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
+  geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
+  scale_x_log10(labels = percent_format()) +
+  scale_y_log10(labels = percent_format()) +
+  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
+  facet_wrap(~author, ncol = 3) +
+  theme(legend.position="none") +
+  labs(y = "Dumas, Alexandre", x = NULL)
+```
+
+
+# Latent Dirichlet Allocation (LDA)
+
+
+Here we will show how LDA works using a few books from some chosen authors:
+
+```{r}
+titles <- c("Pride and Prejudice", "Crime and Punishment",
+            "Adventures of Huckleberry Finn", "Wuthering Heights")
+(books_info <- gutenberg_works(title %in% titles))
+
+```
+
+Download books' texts:
+
+```{r}
+books <- books_info %>%
+  gutenberg_download(meta_fields = "title")
+table(books$title)
+```
+
+```{r}
+# divide into documents, each representing one chapter
+by_chapter <- books %>%
+  group_by(title) %>%
+  mutate(chapter = cumsum(str_detect(text, regex("^chapter ", ignore_case = TRUE)))) %>%
+  ungroup() %>%
+  filter(chapter > 0) %>%
+  unite(document, title, chapter)
+head(by_chapter)
+```
+
+```{r}
+# split into words
+by_chapter_word <- by_chapter %>%
+  unnest_tokens(word, text)
+head(by_chapter_word)
+```
+
+```{r}
+# find document-word counts
+word_counts <- by_chapter_word %>%
+  anti_join(stop_words) %>%
+  filter(nchar(word) > 2) %>%
+  count(document, word, sort = TRUE) %>%
+  ungroup()
+head(word_counts)
+```
+
+`topicmodels` package includes an easy to use LDA implementation.
+
+```{r}
+library(topicmodels)
+```
+
+First, we need to  convert the above long data.frame `word_counts`  into 
+a documents vs terms table with word frequencies:
+
+```{r}
+chapters_dtm <- word_counts %>%
+  cast_dtm(document, word, n)
+chapters_dtm
+```
+
+Running LDA is as simple as calling `LDA()` function (this step might take 
+a couple of minutes). Note that we choose $k = 4$ topics, 
+as we here actually know that chapters come from 5 different books,
+which are dealing with diffrent topcs:
+
+```{r}
+chapters_lda <- LDA(chapters_dtm, k = 4, control = list(seed = 1234))
+chapters_lda
+```
+
+To access the estimated model parameters we can call `tidy()` function.
+Below, we print probabilities of words in different topics, $\boldsymbol \beta$.
+
+```{r}
+chapter_topics <- tidy(chapters_lda, matrix = "beta")
+chapter_topics
+```
+
+We can print top 5 words for each topic:
+
+```{r}
+top_terms <- chapter_topics %>%
+  group_by(topic) %>%
+  top_n(5, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+top_terms
+```
+
+```{r}
+top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+```
+
+We can also look at the probabilities of chapters in different
+topics:
+
+```{r}
+chapters_gamma <- tidy(chapters_lda, matrix = "gamma")
+chapters_gamma
+```
+
+We can check who well did LDA infer the chapter's membership
+
+```{r}
+chapters_gamma <- chapters_gamma %>%
+  separate(document, c("title", "chapter"), sep = "_", convert = TRUE)
+
+chapters_gamma %>%
+  mutate(title = reorder(title, gamma * topic)) %>%
+  ggplot(aes(factor(topic), gamma)) +
+  geom_boxplot() +
+  facet_wrap(~ title)
+```
+
+
+```{r}
+chapter_classifications <- chapters_gamma %>%
+  group_by(title, chapter) %>%
+  top_n(1, gamma) %>%
+  ungroup()
+
+chapter_classifications
+```
+
+```{r}
+book_topics <- chapter_classifications %>%
+  count(title, topic) %>%
+  group_by(title) %>%
+  top_n(1, n) %>%
+  ungroup() %>%
+  transmute(consensus = title, topic)
+
+chapter_classifications %>%
+  inner_join(book_topics, by = "topic") %>%
+  filter(title != consensus)
+```
+
+
+
+
+```{r}
+sessionInfo()
+```
+

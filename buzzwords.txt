@@ -1,0 +1,48 @@
+Conditional
+Regression
+Median
+Cluster
+Hierarchical
+Marginal
+Markov Chain
+Supervised
+Monte Carlo
+Training Set
+Validation
+Independent
+Variable
+Distribution
+Smoother
+Exploratory, Confirmatory
+Design
+Observation
+Samples
+Multivariate
+
+Normal
+Mean
+Variance
+Poisson
+Power
+Confidence Interval
+Hypothesis Test
+Type I error
+Binomial
+Multinomial
+Gamma distribution
+
+Stationary Process
+Heteroscedasticity
+Categorical
+Segmentation
+Nonparametric
+Bootstrap
+Bayesian
+Eigenvector
+Eigenvalue
+Parametric
+Discriminant Analysis
+Exploratory Data Analysis (EDA)
+qq plot
+Voronoi
+singular value decomposition(SVD)
